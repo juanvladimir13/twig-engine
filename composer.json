@@ -1,0 +1,21 @@
+{
+  "name": "juanvladimir13/twig_engine",
+  "description": "render template",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "TwigEngine\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Juan Vladimir",
+      "email": "juanvladimir13@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "twig/twig": "^3.0"
+  }
+}

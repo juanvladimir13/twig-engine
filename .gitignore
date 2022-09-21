@@ -1,3 +1,6 @@
-vendor
-.idea
+.idea/
+vendor/
+cache/
+layout/
+index.php
 composer.lock

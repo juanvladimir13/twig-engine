@@ -3,7 +3,7 @@
  * @author juanvladimir13 <juanvladimir13@gmail.com>
  * @see https://github.com/juanvladimir13
  */
-
+declare(strict_types=1);
 
 namespace TwigEngine;
 
@@ -12,28 +12,36 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Loader\FilesystemLoader;
-// crear esta class como un singleton, parametrizado con variables globales
-//
+use TwigEngine\Plugin\Functions;
+
 class TwigEngine
 {
-  private array $paths;
   private array $options;
 
   private Environment $twig;
   private FilesystemLoader $loader;
+  private static $engine;
 
-  public function __construct(string $rootPath = null, array $paths = [])
+  private function __construct()
   {
     $this->options = TWIG_ENGINE_ENV;
-    $this->paths = $paths;
-    $this->loader = new FilesystemLoader($paths, $rootPath);
+    $this->loader = new FilesystemLoader([], TWIG_ENGINE_ROOTPATH);
   }
 
-  public function addPathsWithNamespace(array $paths)
+  private static function getInstance(): TwigEngine
+  {
+    if (!self::$engine instanceof self) {
+      self::$engine = new self();
+    }
+
+    return self::$engine;
+  }
+
+  public static function addPathsWithNamespace(array $paths): void
   {
     foreach ($paths as $namespace => $path) {
       try {
-        $this->loader->addPath($path, $namespace);
+        self::getInstance()->loader->addPath($path, $namespace);
       } catch (LoaderError $e) {
         echo $e->getMessage();
         break;
@@ -41,33 +49,34 @@ class TwigEngine
     }
   }
 
-  public function addPathWithNamespace(string $path, string $namespace)
+  public static function addPathWithNamespace(string $path, string $namespace): void
   {
     try {
-      $this->loader->addPath($path, $namespace);
+      self::getInstance()->loader->addPath($path, $namespace);
     } catch (LoaderError $e) {
       echo $e->getMessage();
     }
   }
 
-  public function createEnvironment(): void
+  public static function createEnvironment(): void
   {
-    $this->twig = new Environment($this->loader, $this->options);
+    self::getInstance()->twig = new Environment(self::getInstance()->loader, self::getInstance()->options);
+    self::getInstance()->twig->addFunction(Functions::randomId());
   }
 
-  public function render(string $template, array $context): string
+  public static function render(string $template, array $context = [], string $typeFile = '.html'): string
   {
     try {
-      return $this->twig->render($template, $context);
+      return self::getInstance()->twig->render($template . $typeFile, $context);
     } catch (LoaderError | SyntaxError | RuntimeError $e) {
       return $e->getMessage();
     }
   }
 
-  public function renderBlock(string $template, string $blockname, array $context): string
+  public static function renderBlock(string $template, string $blockname, array $context = []): string
   {
     try {
-      $tpl = $this->twig->load($template);
+      $tpl = self::getInstance()->twig->load($template);
     } catch (LoaderError | SyntaxError | RuntimeError $e) {
       echo $e->getMessage();
       $tpl = null;

@@ -3,12 +3,12 @@
  * @author juanvladimir13 <juanvladimir13@gmail.com>
  * @see https://github.com/juanvladimir13
  */
-
+declare(strict_types=1);
 
 namespace TwigEngine;
 
 
-class Config
+class TwigOption
 {
   private array $options;
 
@@ -25,7 +25,7 @@ class Config
     ];
   }
 
-  public function setCache(bool $cache = false): void
+  public function setCache(string|bool $cache): void
   {
     $this->options['cache'] = $cache;
   }
@@ -50,7 +50,7 @@ class Config
     $this->options['strict_variables'] = $strictVariables;
   }
 
-  public function setAutoEscape(string $autoEscape = 'html'): void
+  public function setAutoEscape($autoEscape = 'html'): void
   {
     $this->options['autoescape'] = $autoEscape;
   }
@@ -60,7 +60,7 @@ class Config
     $this->options['optimizations'] = $optimizations;
   }
 
-  public function getOptions()
+  public function getOptions(): array
   {
     return $this->options;
   }

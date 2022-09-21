@@ -1,6 +1,19 @@
-.idea/
-vendor/
-cache/
-layout/
-index.php
+# Vendor
+/vendor
+/psalm
+/cache
+/layout
+/public
+# Composer
+composer.phar
 composer.lock
+# IDE
+/.fleet
+/.idea
+/.vscode
+/nbproject
+.DS_STORE
+# Config
+.php-cs-fixer.cache
+/logs
+/tmp

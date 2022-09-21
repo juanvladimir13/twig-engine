@@ -16,7 +16,7 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": "^7.3.0",
+    "php": ">=7.3.0",
     "twig/twig": "^3.0",
     "ext-yaml": "*"
   }

@@ -18,72 +18,72 @@ use TwigEngine\Plugin\Functions;
 
 class TwigEngine
 {
-  private array $options;
+    private $options;
 
-  private Environment $twig;
-  private FilesystemLoader $loader;
-  private static $engine;
+    private $twig;
+    private $loader;
+    private static $engine;
 
-  private function __construct()
-  {
-    $this->options = TWIG_ENGINE_ENV;
-    $this->loader = new FilesystemLoader([], TWIG_ENGINE_ROOTPATH);
-  }
-
-  private static function getInstance(): TwigEngine
-  {
-    if (!self::$engine instanceof self) {
-      self::$engine = new self();
+    private function __construct()
+    {
+        $this->options = TWIG_ENGINE_ENV;
+        $this->loader = new FilesystemLoader([], TWIG_ENGINE_ROOTPATH);
     }
 
-    return self::$engine;
-  }
+    private static function getInstance()
+    {
+        if (!isset(self::$engine)) {
+            self::$engine = new self();
+        }
 
-  public static function addPathsWithNamespace(array $paths): void
-  {
-    foreach ($paths as $namespace => $path) {
-      try {
-        self::getInstance()->loader->addPath($path, $namespace);
-      } catch (LoaderError $e) {
-        echo $e->getMessage();
-        break;
-      }
-    }
-  }
-
-  public static function addPathWithNamespace(string $path, string $namespace): void
-  {
-    try {
-      self::getInstance()->loader->addPath($path, $namespace);
-    } catch (LoaderError $e) {
-      echo $e->getMessage();
-    }
-  }
-
-  public static function createEnvironment(): void
-  {
-    self::getInstance()->twig = new Environment(self::getInstance()->loader, self::getInstance()->options);
-    self::getInstance()->twig->addFunction(Functions::randomId());
-  }
-
-  public static function render(string $template, array $context = [], string $typeFile = '.html'): string
-  {
-    try {
-      return self::getInstance()->twig->render($template . $typeFile, $context);
-    } catch (LoaderError | SyntaxError | RuntimeError $e) {
-      return $e->getMessage();
-    }
-  }
-
-  public static function renderBlock(string $template, string $blockname, array $context = []): string
-  {
-    try {
-      $tpl = self::getInstance()->twig->load($template);
-    } catch (LoaderError | SyntaxError | RuntimeError $e) {
-      echo $e->getMessage();
-      $tpl = null;
+        return self::$engine;
     }
 
-    return $tpl != null ? $tpl->renderBlock($blockname, $context) : '';
-  }
+    public static function addPathsWithNamespace(array $paths): void
+    {
+        foreach ($paths as $namespace => $path) {
+            try {
+                self::getInstance()->loader->addPath($path, $namespace);
+            } catch (LoaderError $e) {
+                echo $e->getMessage();
+                break;
+            }
+        }
+    }
+
+    public static function addPathWithNamespace(string $path, string $namespace): void
+    {
+        try {
+            self::getInstance()->loader->addPath($path, $namespace);
+        } catch (LoaderError $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public static function createEnvironment(): void
+    {
+        self::getInstance()->twig = new Environment(self::getInstance()->loader, self::getInstance()->options);
+        self::getInstance()->twig->addFunction(Functions::randomId());
+    }
+
+    public static function render(string $template, array $context = [], string $typeFile = '.html'): string
+    {
+        try {
+            return self::getInstance()->twig->render($template . $typeFile, $context);
+        } catch (LoaderError|SyntaxError|RuntimeError $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public static function renderBlock(string $template, string $blockname, array $context = []): string
+    {
+        try {
+            $tpl = self::getInstance()->twig->load($template);
+        } catch (LoaderError|SyntaxError|RuntimeError $e) {
+            echo $e->getMessage();
+            $tpl = null;
+        }
+
+        return $tpl != null ? $tpl->renderBlock($blockname, $context) : '';
+    }
 }

@@ -1,9 +1,10 @@
 {
   "name": "juanvladimir13/twig_engine",
-  "description": "render template",
+  "description": "Util for Twig render template",
   "type": "library",
   "license": "MIT",
-  "version": "0.1.3",
+  "version": "0.1.4",
+  "homepage": "https://juanvladimir13.web.app/",
   "autoload": {
     "psr-4": {
       "TwigEngine\\": "src/"
@@ -15,7 +16,8 @@
       "email": "juanvladimir13@gmail.com"
     }
   ],
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
+  "prefer-stable": true,
   "require": {
     "php": ">=7.2.5",
     "twig/twig": "^3.7",

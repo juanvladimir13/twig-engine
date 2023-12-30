@@ -3,7 +3,6 @@
   "description": "Util for Twig render template",
   "type": "library",
   "license": "MIT",
-  "version": "0.1.4",
   "homepage": "https://juanvladimir13.web.app/",
   "autoload": {
     "psr-4": {
